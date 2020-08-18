@@ -36,12 +36,7 @@ def get_inputs_from_sheet():
     result = sheet.values().get(spreadsheetId=SPREADSHEET_ID, range=RANGE_NAME).execute()
     values = result.get('values', [])
 
-    if not values:
-        print('No data found.')
-    else:
-        for row in values:
-            print('%s, %s' % (row[0], row[1]))
-
+    return values
 
 if __name__ == '__main__':
-    main()
+    get_inputs_from_sheet()
