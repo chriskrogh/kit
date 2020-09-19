@@ -1,5 +1,7 @@
 import pickle
-import os.path
+import os
+import time
+from dotenv import load_dotenv
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
@@ -8,10 +10,13 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-import time
+
+load_dotenv()
 
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
-SPREADSHEET_ID = '10Lo6SFntXxR9VPTIsnDMMy4K0dvDRBE01MHerxT_VH8'
+SPREADSHEET_ID = os.getenv('SPREADSHEET_ID')
+WHATSAPP_USER_DATA_DIRECTORY = os.getenv('WHATSAPP_USER_DATA_DIRECTORY')
+CHROMEDRIVER_EXECUTABLE_PATH = os.getenv('CHROMEDRIVER_EXECUTABLE_PATH')
 RANGE_NAME = 'A1:B1'
 
 
@@ -47,10 +52,11 @@ def get_inputs_from_sheet():
 
 def message_friends():
     options = webdriver.ChromeOptions()
-    options.add_argument("user-data-dir=/Users/christophermohammed/Library/Application Support/Google/Chrome/Default")
-    driver = webdriver.Chrome(executable_path='/Users/christophermohammed/dev/tools/chromedriver', options=options)
+    options.add_argument('user-data-dir=' + WHATSAPP_USER_DATA_DIRECTORY)
+    driver = webdriver.Chrome(
+        executable_path=CHROMEDRIVER_EXECUTABLE_PATH, options=options)
 
-    driver.get("https://web.whatsapp.com/")
+    driver.get('https://web.whatsapp.com/')
     wait = WebDriverWait(driver, 1000)
 
     values = get_inputs_from_sheet()
